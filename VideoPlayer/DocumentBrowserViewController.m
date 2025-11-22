@@ -27,8 +27,9 @@
     NSURL *url = urls.firstObject;
     if (!url) return;
 
-    [self.playerVC openWithURL:url];
-    [self presentViewController:self.playerVC animated:YES completion:nil];
+    [self presentViewController:self.playerVC animated:YES completion:^{
+        [self.playerVC openWithURL:url];
+    }];
 }
 
 

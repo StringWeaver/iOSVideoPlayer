@@ -73,10 +73,8 @@ NSString *TrimLeadingNonDigits(NSString *input) {
     titleItem.value = title;
     item.externalMetadata = @[titleItem];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindowScene *scene = self.view.window.windowScene;
-        scene.title = title;
-    });
+    UIWindowScene *scene = self.view.window.windowScene;
+    scene.title = title;
 
     
     self.player = [AVPlayer playerWithPlayerItem:item];
