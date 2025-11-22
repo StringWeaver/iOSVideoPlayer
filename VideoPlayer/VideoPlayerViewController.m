@@ -26,11 +26,16 @@
 - (void)cleanupPlayer {
 
     [self.player pause];
+    if (self.timeObserver) {
+        [self.player removeTimeObserver:self.timeObserver];
+        self.timeObserver = nil;
+    }
     self.player = nil;
     if (self.currentSecurityURL) {
         [self.currentSecurityURL stopAccessingSecurityScopedResource];
         self.currentSecurityURL = nil;
     }
+    
 }
 - (void)dealloc {
     [self cleanupPlayer];
@@ -60,7 +65,8 @@ NSString *TrimLeadingNonDigits(NSString *input) {
     }
     
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
-    NSString *title = TrimLeadingNonDigits(url.lastPathComponent);
+    NSString *filename = url.lastPathComponent;
+    NSString *title = TrimLeadingNonDigits(filename);
     AVMutableMetadataItem *titleItem = [[AVMutableMetadataItem alloc] init];
     titleItem.keySpace = AVMetadataKeySpaceCommon;
     titleItem.key = AVMetadataCommonKeyTitle;
@@ -78,7 +84,26 @@ NSString *TrimLeadingNonDigits(NSString *input) {
     self.showsPlaybackControls = YES;
     
     [self.player play];
+    [self.player seekToTime:[self loadProgressForFilename:filename] toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    __weak typeof(self) weakSelf = self;
+    self.timeObserver =
+        [self.player addPeriodicTimeObserverForInterval:CMTimeMake(2, 1)
+            queue:dispatch_get_main_queue()
+            usingBlock:^(CMTime time) {
+                [weakSelf saveProgress:time filename:filename];
+            }
+        ];
 }
 
+- (void)saveProgress:(CMTime)time filename:(NSString *)filename {
+    Float64 seconds = CMTimeGetSeconds(time);
+    if (seconds > 0) {
+        [[NSUserDefaults standardUserDefaults] setDouble:seconds forKey:filename];
+    }
+}
+- (CMTime)loadProgressForFilename:(NSString *)filename {
+    Float64 seconds = [[NSUserDefaults standardUserDefaults] doubleForKey:filename];
+    return CMTimeMakeWithSeconds(seconds, 1);
+}
 
 @end
