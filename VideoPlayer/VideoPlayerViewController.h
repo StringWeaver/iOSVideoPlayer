@@ -1,6 +1,6 @@
 #import <AVKit/AVKit.h>
+#import "PlayerModel.h"
 @interface VideoPlayerViewController : AVPlayerViewController<AVPlayerViewControllerDelegate>
-@property (nonatomic, strong) NSURL *currentSecurityURL;
-@property (nonatomic, strong) id timeObserver;
+@property (nonatomic, strong) PlayerModel* playerModel;
 - (void)openWithURL:(NSURL *)url ;
 @end

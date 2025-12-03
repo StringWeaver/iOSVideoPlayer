@@ -1,7 +1,6 @@
 // VideoDocumentBrowserViewController.m
+
 #import "DocumentBrowserViewController.h"
-
-
 
 @implementation DocumentBrowserViewController
 
@@ -31,8 +30,5 @@
         [self.playerVC openWithURL:url];
     }];
 }
-
-
-
 
 @end
