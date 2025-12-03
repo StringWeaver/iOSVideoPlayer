@@ -32,7 +32,6 @@
 
 - (void)openWithURL:(NSURL *)url {
     NSAssert([NSThread isMainThread], @"this method must be execute on main thread!");
-    // 清理上一个
     _playerModel = [[PlayerModel alloc] init];
     [_playerModel loadURL:url];
 

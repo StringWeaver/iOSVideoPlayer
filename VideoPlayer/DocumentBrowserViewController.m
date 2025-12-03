@@ -15,7 +15,6 @@
     self.allowsPickingMultipleItems = YES;
     self.allowsDocumentCreation = NO;
     self.playerVC = [[VideoPlayerViewController alloc] init];
-    // 视需要可以设置其他 UI 配置
 }
 
 

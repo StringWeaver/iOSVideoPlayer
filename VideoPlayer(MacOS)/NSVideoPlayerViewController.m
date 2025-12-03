@@ -13,34 +13,30 @@
 
 @implementation NSVideoPlayerViewController
 
+
+
+
 - (void)loadView {
     self.view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 800, 600)];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-
     self.playerView = [[AVPlayerView alloc] initWithFrame:self.view.bounds];
-    self.playerView.controlsStyle = AVPlayerViewControlsStyleDefault;
+    self.playerView.controlsStyle = AVPlayerViewControlsStyleInline;
     self.playerView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     self.playerView.allowsPictureInPicturePlayback = NO;
     self.playerView.layer.magnificationFilter = kCAFilterNearest;
+    _playerView.showsFullScreenToggleButton = YES;
     [self.view addSubview:self.playerView];
-    self.view.wantsLayer = YES;
-    self.playerView.wantsLayer = YES;
 }
 
 #pragma mark - KeybaordEvent
 
 
-- (BOOL)acceptsFirstResponder {
-    return YES;
-}
 
 - (void)viewDidAppear {
     [super viewDidAppear];
-    [[[self view] window] makeFirstResponder:self];
 }
 
 // 监听 ESC
@@ -70,7 +66,7 @@
 
     NSWindow *window = self.view.window;
     if (window) {
-        window.title = self.playerModel.title ?: @"Video";
+        window.title = self.playerModel.title;
     }
 
     self.playerView.player = self.playerModel.player;

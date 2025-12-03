@@ -13,12 +13,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self commonInit];
+    self.playerVC = [[NSVideoPlayerViewController alloc] init];
+    NSButton *openButton = [NSButton buttonWithTitle:@"Open File"
+                                                 target:self
+                                                 action:@selector(openDocumentPicker)];
+    openButton.bezelStyle = NSBezelStyleRounded;
+    openButton.frame = NSMakeRect(0, 0, 120, 40);
+    openButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:openButton];
+
+
+    [NSLayoutConstraint activateConstraints:@[
+       [openButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+       [openButton.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
+    ]];
 }
 
-- (void)commonInit {
-    self.playerVC = [[NSVideoPlayerViewController alloc] init];
+- (void)viewDidAppear {
+    
     [self openDocumentPicker];
+    
 }
 
 
@@ -26,19 +40,14 @@
 - (void)openDocumentPicker {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
 
-    panel.canChooseFiles = YES;
-    panel.canChooseDirectories = NO;
     panel.allowsMultipleSelection = YES;
     panel.allowedContentTypes = @[UTTypeMovie ,UTTypeVideo, UTTypeAudio];
 
-    [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSModalResponse result) {
-        if (result == NSModalResponseOK) {
-            NSURL *url = panel.URLs.firstObject;
-            if (url) {
-                [self presentPlayerWithURL:url];
-            }
-        }
-    }];
+    if ([panel runModal] == NSModalResponseOK) {
+        NSURL *url = panel.URLs.firstObject;
+        if (url) [self presentPlayerWithURL:url];
+    }
+    
 }
 
 
