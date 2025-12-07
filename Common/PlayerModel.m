@@ -70,6 +70,7 @@ static NSString *trimLeadingNonDigits(NSString *input) {
     #endif
 
     self.player = [[AVPlayer alloc] initWithPlayerItem:item];
+    _player.preventsDisplaySleepDuringVideoPlayback = YES;
 
     double seconds = [[NSUserDefaults standardUserDefaults] doubleForKey:self.filename];
     CMTime twoSec = CMTimeMake(2, 1); // 2 seconds

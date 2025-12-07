@@ -41,7 +41,6 @@
     scene.title = self.playerModel.title;
     self.view.layer.magnificationFilter = kCAFilterNearest;
     NSLog(@"ScreenScale:%f",self.view.window.screen.scale);
-    self.view.layer.contentsScale = self.view.window.screen.scale;
     
     self.player = _playerModel.player;
     
